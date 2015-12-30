@@ -44,15 +44,16 @@ function! s:vim_completes_me(shift_tab)
   endif
 
   " Figure out if user has started typing a path or a period or an arrow
-  " operator
+  " operator or a double colon (::) operator.
   let period = match(substr, '\.') != -1
   let arrow_oper = match(substr, '->') != -1
+  let double_colon = match(substr, '\:\:') != -1
   let file_path = (has('win32') || has('win64')) ? '\\' : '\/'
   let file_pattern = match(substr, file_path) != -1
 
   if file_pattern
     return "\<C-x>\<C-f>"
-  elseif (period || arrow_oper) && (&omnifunc != '')
+  elseif (period || arrow_oper || double_colon) && (&omnifunc != '')
     if get(b:, 'tab_complete_pos', []) == pos
       let exp = "\<C-x>" . dirs[!dir]
     else
